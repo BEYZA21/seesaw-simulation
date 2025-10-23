@@ -54,3 +54,34 @@ body {
     transition: transform 0.3s ease;
     cursor: pointer;
 }
+/* weight circles that drop on the beam */
+.weight {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f55;
+    /* red by default, maybe random later */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 3px black;
+    transform: translate(-50%, -50%);
+    animation: drop 0.3s ease-out;
+    /* TODO: maybe add a shadow? */
+}
+
+@keyframes drop {
+    from {
+        transform: translate(-50%, -100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
