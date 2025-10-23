@@ -66,3 +66,21 @@ function updateSeesaw() {
     lastSave = now;
   }
 }
+//log messages
+function logMsg(msg) {
+  const div = document.createElement("div");
+  div.textContent = msg;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight; // auto scroll down
+}
+
+// reset everything
+  weights.forEach(w => w.el.remove());
+  weights = [];
+  currentAngle = 0;
+  beam.style.transform = `translateX(-50%) rotate(0deg)`;
+  log.innerHTML = "";
+  updateSeesaw();
+  logMsg("Reset done");
+
+
