@@ -82,5 +82,30 @@ function logMsg(msg) {
   log.innerHTML = "";
   updateSeesaw();
   logMsg("Reset done");
+//save+load functions
+function saveState() {
+  const state = weights.map(w => ({ x: w.x, weight: w.weight }));
+  localStorage.setItem("weights", JSON.stringify(state));
+}
 
+function loadState() {
+  const saved = localStorage.getItem("weights");
+  if (!saved) return; // nothing saved before
 
+  const arr = JSON.parse(saved);
+  arr.forEach(w => {
+    const el = document.createElement("div");
+    el.className = "weight";
+    el.style.left = `${400 + w.x}px`; // 400 = half of beam width (ish)
+    el.style.background = w.x < 0 ? "#3b82f6" : "#ef4444";
+    el.textContent = `${w.weight}kg`;
+    beam.appendChild(el);
+    weights.push({ ...w, el });
+  });
+
+  logMsg("Restored from previous session");
+  updateSeesaw();
+}
+
+// load when ready
+window.addEventListener("load", loadState);
