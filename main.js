@@ -30,3 +30,39 @@ beam.addEventListener("click", (e) => {
   logMessage(`+${w}kg added to ${side} side`);
   updateSeesaw();
 });
+
+// torque + angle math
+function updateSeesaw() {
+  let leftTorque = 0, rightTorque = 0;
+
+  // go through all weights
+  weights.forEach((w) => {
+    if (w.x < 0) {
+      leftTorque += Math.abs(w.x) * w.weight;
+    } else {
+      rightTorque += w.x * w.weight;
+    }
+  });
+
+  // print to console (for debugging)
+  console.log("torques =>", leftTorque, rightTorque);
+
+  // torque difference → angle (limited to ±30)
+  const diff = (rightTorque - leftTorque) / 10;
+  currentAngle = Math.max(-30, Math.min(30, diff));
+
+  // rotate the beam
+  beam.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
+
+  // show values in UI
+  leftText.textContent = leftTorque.toFixed(0);
+  rightText.textContent = rightTorque.toFixed(0);
+  angleText.textContent = currentAngle.toFixed(1) + "°";
+
+  // save periodically (not every frame)
+  const now = Date.now();
+  if (now - lastSave > 1500) { // every ~1.5s
+    saveState();
+    lastSave = now;
+  }
+}
