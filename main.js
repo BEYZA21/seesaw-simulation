@@ -39,7 +39,7 @@ beam.addEventListener("click", (e) => {
 function updateSeesaw() {
   let leftTorque = 0, rightTorque = 0;
   weights.forEach((w) => {
-    const torque = Math.abs(w.x) * w.weight;
+    const torque = Math.abs(w.x) * w.weight; // tork formule
     if (w.x < 0) leftTorque += torque;
     else rightTorque += torque;
   });
@@ -50,7 +50,7 @@ function updateSeesaw() {
 
   // totals for UI (sum of weights)
   const leftMass = weights.filter(w => w.x < 0).reduce((s, w) => s + w.weight, 0);
-  const rightMass = weights.filter(w => w.x > 0).reduce((s, w) => s + w.weight, 0);
+  const rightMass = weights.filter(w => w.x > 0).reduce((s, w) => s + w.weight, 0); //left and right total weight calculate
 
   leftText.textContent = leftMass.toFixed(0);
   rightText.textContent = rightMass.toFixed(0);
@@ -90,7 +90,7 @@ function logMsg(msg) {
   log.scrollTop = log.scrollHeight;
 }
 
-// reset everything
+// reset everything (bonus feature)
 resetBtn.addEventListener("click", () => {
   weights.forEach(w => w.el.remove());
   weights = [];
@@ -105,7 +105,7 @@ resetBtn.addEventListener("click", () => {
   saveState();
 });
 
-// save + load
+// save + load functions
 function saveState() {
   const data = weights.map(w => ({ x: w.x, weight: w.weight }));
   localStorage.setItem("weights", JSON.stringify(data));

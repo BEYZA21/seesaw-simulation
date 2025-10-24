@@ -1,7 +1,7 @@
 /* -- base layout -- */
 body {
     margin: 0;
-    background: #f5f5f5;
+    background: #f5f5f5; /* light gray  */
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -9,14 +9,14 @@ body {
     height: 100vh;
     overflow: hidden;
 }
-
+/* title and stats */
 .header {
     text-align: center;
     margin-top: 10px;
 }
 
 .stats {
-    color: #333;
+    color: #333; /* darker gray */
     margin-top: 5px;
     font-size: 18px;
 }
@@ -32,10 +32,11 @@ body {
 #pivot {
     position: absolute;
     bottom: 120px;
-    left: 50%;
+    left: 50%; /* center horizontally */
     transform: translateX(-50%);
     width: 0;
     height: 0;
+    /* triangle shape */
     border-left: 25px solid transparent;
     border-right: 25px solid transparent;
     border-top: 50px solid #333;
@@ -50,7 +51,7 @@ body {
     width: 400px;
     /* fixed length as required */
     height: 12px;
-    background: #8b5a2b;
+    background: #8b5a2b; /* brown color */
     border-radius: 6px;
     transform-origin: center;
     transform: translateX(-50%) rotate(0deg);
@@ -67,7 +68,7 @@ body {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: #f55;
+    background: #f55; /* bright red */
     /* default red, color changes by side */
     display: flex;
     align-items: center;
@@ -77,11 +78,12 @@ body {
     color: white;
     text-shadow: 0 0 3px black;
     transform: translate(-50%, -50%);
-    animation: drop 0.25s ease-out;
+    animation: drop 0.25s ease-out; /* little fall animation */
     pointer-events: none;
     /* makes click-through on beam still work */
 }
 
+/* drop animation */
 @keyframes drop {
     from {
         transform: translate(-50%, -120px);
@@ -131,7 +133,7 @@ button:hover {
     line-height: 1.4;
 }
 
-/* === bonus visual scale (optional, can keep or remove) === */
+/* === bonus visual scale  === */
 #beam::after {
     content: "";
     position: absolute;
