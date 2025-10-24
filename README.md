@@ -43,6 +43,9 @@ All physics formulas, logic, and basic interactive behavior (torque, animation, 
 🚀 How to Run
 
 1.Clone or download the project files.
+
 2.Open index.html in any modern web browser.
+
 3.Click on the beam to add weights and observe the tilt.
+
 4.Use the “Reset” button to clear the scene.
