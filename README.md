@@ -30,3 +30,19 @@ When the page loads, the app restores the previous weights and beam position.
 5.User Interface and Logging:
 A small logging panel records each action (e.g., added weights, reset).
 The interface also displays the total mass on each side and the current angle in degrees.
+🤖 AI Assistance
+
+Some parts of the development were supported by AI assistance (ChatGPT):
+
+🤖 AI Support
+
+Parts of the development were supported by AI support (ChatGPT):
+This README.md file was written in a professional and descriptive style.
+All physics formulas, logic, and basic interactive behavior (torque, animation, click handling, and save/load mechanisms) were initially implemented by the developer.
+
+🚀 How to Run
+
+1.Clone or download the project files.
+2.Open index.html in any modern web browser.
+3.Click on the beam to add weights and observe the tilt.
+4.Use the “Reset” button to clear the scene.
