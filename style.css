@@ -148,3 +148,25 @@ button:hover {
             transparent 22px);
     pointer-events: none;
 }
+/* === sound controls === */
+#soundControls {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: #ffffffb8;
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#muteToggle {
+    cursor: pointer;
+    border: none;
+    background: #f3f3f3;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 18px;
+}

@@ -6,6 +6,71 @@ const angleText = document.querySelector("#angle");
 const leftText = document.querySelector("#left");
 const rightText = document.querySelector("#right");
 const resetBtn = document.querySelector("#resetBtn");
+// audio system
+const SFX = {
+  ctx: null,
+  gain: null,
+  buffers: {},
+  enabled: true,
+  volume: 0.4,
+};
+// start audio after first click anywhere (browser policy)
+window.addEventListener("click", () => {
+  if (!SFX.ctx) {
+    ensureAudio();
+    console.log("Audio system initialized 🎧");
+  }
+}, { once: true });
+
+//void audio init function
+async function initAudio() {
+  if (SFX.ctx) return;
+  SFX.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  SFX.gain = SFX.ctx.createGain();
+  SFX.gain.gain.value = SFX.volume;
+  SFX.gain.connect(SFX.ctx.destination);
+  await Promise.all([
+    loadSound("drop", "sfx/drop.mp3"),
+    loadSound("settle", "sfx/settle.mp3"),
+    loadSound("reset", "sfx/reset.mp3"),
+  ]);
+}
+
+//void audio load function 
+async function loadSound(name, url) {
+  const res = await fetch(url);
+  const buf = await res.arrayBuffer();
+  SFX.buffers[name] = await SFX.ctx.decodeAudioData(buf);
+}
+
+function ensureAudio() {
+  if (!SFX.ctx) initAudio();
+  else if (SFX.ctx.state === "suspended") SFX.ctx.resume();
+}
+
+function playSfx(name, vol = 1, rate = 1) {
+  if (!SFX.enabled || !SFX.buffers[name]) return;
+  const src = SFX.ctx.createBufferSource();
+  src.buffer = SFX.buffers[name];
+  src.playbackRate.value = rate;
+  const gain = SFX.ctx.createGain();
+  gain.gain.value = vol;
+  src.connect(gain).connect(SFX.gain);
+  src.start();
+}
+
+// volume + mute controls
+const muteToggle = document.querySelector("#muteToggle");
+const volRange = document.querySelector("#volRange");
+
+muteToggle.addEventListener("click", () => {
+  SFX.enabled = !SFX.enabled;
+  muteToggle.textContent = SFX.enabled ? "🔊" : "🔇";
+});
+volRange.addEventListener("input", () => {
+  SFX.volume = parseFloat(volRange.value);
+  if (SFX.gain) SFX.gain.gain.value = SFX.volume;
+});
 
 let weights = []; // gonna store all dropped weights
 let currentAngle = 0;
@@ -15,6 +80,7 @@ let anim;
 
 // click to drop new weight
 beam.addEventListener("click", (e) => {
+  ensureAudio(); // 🔊 added sound init
   const rect = beam.getBoundingClientRect();
   const x = e.clientX - rect.left - rect.width / 2; // 0 = center
   const side = x < 0 ? "left" : "right";
@@ -32,6 +98,7 @@ beam.addEventListener("click", (e) => {
 
   weights.push({ x, weight: w, el });
   logMsg(`+${w}kg added to ${side} side`);
+  playSfx("drop", 0.5, 1 + w * 0.015); // 🔊 added sound effect
   updateSeesaw();
 });
 
@@ -69,6 +136,7 @@ function updateSeesaw() {
 
 // smooth tilt using requestAnimationFrame
 function animateTilt() {
+  const prevAngle = currentAngle; // 🔊 added to detect final movement
   currentAngle += (targetAngle - currentAngle) * 0.2;
   beam.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
   angleText.textContent = currentAngle.toFixed(1) + "°";
@@ -79,6 +147,11 @@ function animateTilt() {
     currentAngle = targetAngle;
     beam.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
     angleText.textContent = currentAngle.toFixed(1) + "°";
+
+    // 🔊 subtle settle sound when movement stops
+    if (Math.abs(currentAngle - prevAngle) > 2) {
+      playSfx("settle", 0.25 + Math.abs(currentAngle) / 200, 1);
+    }
   }
 }
 
@@ -102,6 +175,7 @@ resetBtn.addEventListener("click", () => {
   rightText.textContent = "0";
   angleText.textContent = "0°";
   logMsg("Reset done");
+  playSfx("reset", 0.4); //  added reset sound
   saveState();
 });
 
@@ -134,3 +208,10 @@ function loadState() {
 }
 
 window.addEventListener("load", loadState);
+window.addEventListener("keydown", (e) => {
+  if (e.key === "d") {
+    ensureAudio();
+    playSfx("drop", 0.5);
+    console.log("▶ Tried playing drop sound");
+  }
+});
